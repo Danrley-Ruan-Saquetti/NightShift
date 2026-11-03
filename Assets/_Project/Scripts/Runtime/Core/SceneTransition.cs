@@ -19,6 +19,8 @@ namespace NightShift
 
         public static SceneTransition Instance { get; private set; }
 
+        public bool IsTransitioning => isTransitioning;
+
         private readonly List<XRBaseInteractor> blockedInteractors = new List<XRBaseInteractor>();
         private Material overlayMaterial;
         private float alpha = 1f;
@@ -35,7 +37,7 @@ namespace NightShift
             Instance = this;
             DontDestroyOnLoad(gameObject);
             overlayMaterial = overlay.material;
-            ApplyAlpha(1f);
+            ApplyAlpha(1f, true);
         }
 
         private void Start()
@@ -70,6 +72,11 @@ namespace NightShift
             StartCoroutine(ExitScene(sceneName));
         }
 
+        public IEnumerator FadeScreen(float targetAlpha, float duration)
+        {
+            return FadeTo(targetAlpha, duration, false);
+        }
+
         public void ReloadCurrentScene()
         {
             LoadScene(SceneManager.GetActiveScene().name);
@@ -79,7 +86,7 @@ namespace NightShift
         {
             isTransitioning = true;
             BlockInteractors();
-            yield return FadeTo(1f, fadeOutDuration);
+            yield return FadeTo(1f, fadeOutDuration, true);
             overlay.transform.SetParent(transform, false);
             yield return SceneManager.LoadSceneAsync(sceneName);
             yield return EnterScene();
@@ -90,32 +97,36 @@ namespace NightShift
             isTransitioning = true;
             AttachOverlayToCamera();
             BlockInteractors();
-            yield return FadeTo(0f, fadeInDuration);
+            yield return FadeTo(0f, fadeInDuration, true);
             UnblockInteractors();
             isTransitioning = false;
         }
 
-        private IEnumerator FadeTo(float targetAlpha, float duration)
+        private IEnumerator FadeTo(float targetAlpha, float duration, bool silencesAudio)
         {
             if (duration <= 0f)
             {
-                ApplyAlpha(targetAlpha);
+                ApplyAlpha(targetAlpha, silencesAudio);
                 yield break;
             }
 
             while (!Mathf.Approximately(alpha, targetAlpha))
             {
-                ApplyAlpha(Mathf.MoveTowards(alpha, targetAlpha, Time.unscaledDeltaTime / duration));
+                ApplyAlpha(Mathf.MoveTowards(alpha, targetAlpha, Time.unscaledDeltaTime / duration), silencesAudio);
                 yield return null;
             }
         }
 
-        private void ApplyAlpha(float value)
+        private void ApplyAlpha(float value, bool silencesAudio)
         {
             alpha = value;
             overlayMaterial.SetColor(ColorId, new Color(0f, 0f, 0f, alpha));
-            AudioListener.volume = 1f - alpha;
             overlay.enabled = alpha > 0f;
+
+            if (silencesAudio)
+            {
+                AudioListener.volume = 1f - alpha;
+            }
         }
 
         private void AttachOverlayToCamera()
