@@ -11,6 +11,17 @@ namespace NightShift
 
         public Transform HidingVolume => hidingVolume;
         public bool IsDoorClosed => door.IsClosed();
+        public Vector3 ExitDirection => transform.forward;
+
+        public bool Contains(Vector3 worldPoint)
+        {
+            return UnitBox.Contains(hidingVolume, worldPoint);
+        }
+
+        public void BurstOpen(float angle, float duration)
+        {
+            door.OpenTo(angle, duration);
+        }
 
         private void OnDrawGizmosSelected()
         {

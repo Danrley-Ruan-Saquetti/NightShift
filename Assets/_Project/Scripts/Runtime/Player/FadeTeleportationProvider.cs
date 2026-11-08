@@ -17,6 +17,8 @@ namespace NightShift
         private bool isFading;
         private bool hasTeleported;
 
+        public bool IsFading => isFading;
+
         public override bool QueueTeleportRequest(TeleportRequest teleportRequest)
         {
             SceneTransition transition = SceneTransition.Instance;

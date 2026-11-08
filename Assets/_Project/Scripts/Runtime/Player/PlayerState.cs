@@ -95,6 +95,19 @@ namespace NightShift
             HidingChanged?.Invoke();
         }
 
+        public Closet FindClosetAroundHead()
+        {
+            foreach (Closet closet in closets)
+            {
+                if (closet.Contains(head.position))
+                {
+                    return closet;
+                }
+            }
+
+            return null;
+        }
+
         private void ResolveVolume()
         {
             foreach (RoomVolume volume in roomVolumes)

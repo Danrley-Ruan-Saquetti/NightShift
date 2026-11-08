@@ -58,6 +58,11 @@ namespace NightShift
 
         public void LoadScene(string sceneName)
         {
+            LoadScene(sceneName, 0f);
+        }
+
+        private void LoadScene(string sceneName, float blackHoldDuration)
+        {
             if (isTransitioning)
             {
                 return;
@@ -69,7 +74,7 @@ namespace NightShift
                 return;
             }
 
-            StartCoroutine(ExitScene(sceneName));
+            StartCoroutine(ExitScene(sceneName, blackHoldDuration));
         }
 
         public IEnumerator FadeScreen(float targetAlpha, float duration)
@@ -79,14 +84,37 @@ namespace NightShift
 
         public void ReloadCurrentScene()
         {
-            LoadScene(SceneManager.GetActiveScene().name);
+            ReloadCurrentScene(0f);
         }
 
-        private IEnumerator ExitScene(string sceneName)
+        public void ReloadCurrentScene(float blackHoldDuration)
+        {
+            LoadScene(SceneManager.GetActiveScene().name, blackHoldDuration);
+        }
+
+        public void BlockInteractors()
+        {
+            foreach (XRBaseInteractor interactor in FindObjectsByType<XRBaseInteractor>(FindObjectsSortMode.None))
+            {
+                if (interactor.enabled)
+                {
+                    interactor.enabled = false;
+                    blockedInteractors.Add(interactor);
+                }
+            }
+        }
+
+        private IEnumerator ExitScene(string sceneName, float blackHoldDuration)
         {
             isTransitioning = true;
             BlockInteractors();
             yield return FadeTo(1f, fadeOutDuration, true);
+
+            if (blackHoldDuration > 0f)
+            {
+                yield return new WaitForSecondsRealtime(blackHoldDuration);
+            }
+
             overlay.transform.SetParent(transform, false);
             yield return SceneManager.LoadSceneAsync(sceneName);
             yield return EnterScene();
@@ -95,6 +123,7 @@ namespace NightShift
         private IEnumerator EnterScene()
         {
             isTransitioning = true;
+            AudioListener.pause = false;
             AttachOverlayToCamera();
             BlockInteractors();
             yield return FadeTo(0f, fadeInDuration, true);
@@ -141,18 +170,6 @@ namespace NightShift
             overlay.transform.SetParent(mainCamera.transform, false);
             overlay.transform.localPosition = Vector3.zero;
             overlay.transform.localRotation = Quaternion.identity;
-        }
-
-        private void BlockInteractors()
-        {
-            foreach (XRBaseInteractor interactor in FindObjectsByType<XRBaseInteractor>(FindObjectsSortMode.None))
-            {
-                if (interactor.enabled)
-                {
-                    interactor.enabled = false;
-                    blockedInteractors.Add(interactor);
-                }
-            }
         }
 
         private void UnblockInteractors()
