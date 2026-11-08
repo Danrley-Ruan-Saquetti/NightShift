@@ -29,7 +29,7 @@ namespace NightShift
         private IXRSelectInteractor holdingInteractor;
         private float angle;
         private float grabOffset;
-        private bool isClosing;
+        private bool isAnimating;
 
         public event Action Released;
 
@@ -53,7 +53,7 @@ namespace NightShift
 
         private void Update()
         {
-            if (!IsHeld || IsLocked || isClosing)
+            if (!IsHeld || IsLocked || isAnimating)
             {
                 return;
             }
@@ -79,27 +79,41 @@ namespace NightShift
 
         public void CloseAndLock()
         {
-            if (isClosing)
+            if (isAnimating)
             {
                 return;
             }
 
-            StartCoroutine(CloseAndLockRoutine());
+            float closeSpeed = closeDuration > 0f ? maxOpenAngle / closeDuration : float.MaxValue;
+            StartCoroutine(AnimateTo(0f, closeSpeed, Lock));
         }
 
-        private IEnumerator CloseAndLockRoutine()
+        public void OpenTo(float targetAngle, float duration)
         {
-            isClosing = true;
-            float closeSpeed = closeDuration > 0f ? maxOpenAngle / closeDuration : float.MaxValue;
-
-            while (angle > 0f)
+            if (isAnimating)
             {
-                ApplyAngle(Mathf.MoveTowards(angle, 0f, closeSpeed * Time.deltaTime));
+                return;
+            }
+
+            float target = Mathf.Clamp(targetAngle, 0f, maxOpenAngle);
+            float openSpeed = duration > 0f ? Mathf.Abs(target - angle) / duration : float.MaxValue;
+            StartCoroutine(AnimateTo(target, openSpeed, null));
+        }
+
+        private IEnumerator AnimateTo(float target, float speed, Action finished)
+        {
+            isAnimating = true;
+
+            while (!Mathf.Approximately(angle, target))
+            {
+                ApplyAngle(Mathf.MoveTowards(angle, target, speed * Time.deltaTime));
                 yield return null;
             }
 
-            isClosing = false;
-            Lock();
+            ApplyAngle(target);
+            isAnimating = false;
+            CaptureGrabOffset();
+            finished?.Invoke();
         }
 
         private float GetHandAngle()
