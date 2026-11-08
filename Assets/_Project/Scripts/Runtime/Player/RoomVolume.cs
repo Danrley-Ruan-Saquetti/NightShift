@@ -4,8 +4,6 @@ namespace NightShift
 {
     public class RoomVolume : MonoBehaviour
     {
-        private const float HalfExtent = 0.5f;
-
         [SerializeField]
         private Room room;
 
@@ -13,10 +11,7 @@ namespace NightShift
 
         public bool Contains(Vector3 worldPoint)
         {
-            Vector3 local = transform.InverseTransformPoint(worldPoint);
-            return Mathf.Abs(local.x) <= HalfExtent
-                && Mathf.Abs(local.y) <= HalfExtent
-                && Mathf.Abs(local.z) <= HalfExtent;
+            return UnitBox.Contains(transform, worldPoint);
         }
 
         private void OnDrawGizmosSelected()
