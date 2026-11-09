@@ -16,6 +16,8 @@ namespace NightShift
         [SerializeField]
         private float closedThreshold = 2f;
         [SerializeField]
+        private float snapClosedBelow;
+        [SerializeField]
         private float closeDuration = 1f;
         [SerializeField]
         private bool startsLocked;
@@ -153,6 +155,12 @@ namespace NightShift
         {
             IsHeld = false;
             holdingInteractor = null;
+
+            if (!IsLocked && !isAnimating)
+            {
+                ApplyAngle(DoorAngle.ResolveReleased(angle, snapClosedBelow));
+            }
+
             Released?.Invoke();
         }
     }

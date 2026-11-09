@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace NightShift
@@ -6,6 +7,8 @@ namespace NightShift
     {
         [SerializeField]
         private RoomLights[] rooms;
+
+        public IReadOnlyList<RoomLights> Rooms => rooms;
 
         public RoomLights Get(Room room)
         {

@@ -1671,6 +1671,10 @@ PrefabInstance:
       propertyPath: maxOpenAngle
       value: 110
       objectReference: {fileID: 0}
+    - target: {fileID: 8653214267519293468, guid: ab84e9f0789c45a4fb631e1bef180912, type: 3}
+      propertyPath: snapClosedBelow
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

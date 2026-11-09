@@ -44,5 +44,23 @@ namespace NightShift.Tests
 
             Assert.That(angle, Is.EqualTo(-90f).Within(0.01f));
         }
+
+        [Test]
+        public void ResolveReleased_BelowThreshold_SnapsToZero()
+        {
+            Assert.That(DoorAngle.ResolveReleased(3f, 5f), Is.EqualTo(0f));
+        }
+
+        [Test]
+        public void ResolveReleased_AtThreshold_Keeps()
+        {
+            Assert.That(DoorAngle.ResolveReleased(5f, 5f), Is.EqualTo(5f));
+        }
+
+        [Test]
+        public void ResolveReleased_Disabled_Keeps()
+        {
+            Assert.That(DoorAngle.ResolveReleased(1f, 0f), Is.EqualTo(1f));
+        }
     }
 }
