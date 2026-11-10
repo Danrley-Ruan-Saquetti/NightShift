@@ -224,16 +224,50 @@ namespace NightShift.Tests
         }
 
         [Test]
-        public void BeginUnscheduled_DoesNotConsumeScript()
+        public void Close_DoesNotQueue()
         {
-            schedule.BeginUnscheduled();
-            schedule.End(0f);
+            List<EventKind> queued = Record();
+
+            schedule.Close();
+            schedule.SetCompletedCount(11);
+
+            Assert.That(queued, Is.Empty);
+            Assert.That(schedule.IsClosed, Is.True);
+        }
+
+        [Test]
+        public void Close_DropsPendingQueue()
+        {
+            schedule.SetCompletedCount(5);
+
+            schedule.Close();
+
+            Assert.That(schedule.TryTakeNext(0f, false, true, out _), Is.False);
+        }
+
+        [Test]
+        public void Close_RejectsMirror()
+        {
+            schedule.Close();
+
+            Assert.That(schedule.TryTakeMirror(0f, false), Is.False);
+            Assert.That(schedule.IsRunning, Is.False);
+        }
+
+        [Test]
+        public void Close_RunningEventStillEnds()
+        {
             schedule.SetCompletedCount(2);
+            schedule.TryTakeNext(0f, false, true, out _);
 
-            bool taken = schedule.TryTakeNext(40f, false, true, out EventKind kind);
+            schedule.Close();
 
-            Assert.That(taken, Is.True);
-            Assert.That(kind, Is.EqualTo(EventKind.Visitor));
+            Assert.That(schedule.IsRunning, Is.True);
+
+            schedule.End(10f);
+
+            Assert.That(schedule.IsRunning, Is.False);
+            Assert.That(schedule.TryTakeNext(100f, false, true, out _), Is.False);
         }
 
         private List<EventKind> Record()

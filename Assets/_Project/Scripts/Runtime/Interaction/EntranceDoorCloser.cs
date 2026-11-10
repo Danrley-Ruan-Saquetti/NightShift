@@ -23,6 +23,11 @@ namespace NightShift
             door.Released -= OnDoorReleased;
         }
 
+        public void Disarm()
+        {
+            hasClosed = true;
+        }
+
         private void CloseIfPlayerIsInside()
         {
             if (hasClosed || playerState.CurrentRoom != Room.LivingRoom || door.IsHeld)

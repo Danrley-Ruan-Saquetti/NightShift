@@ -30,10 +30,22 @@ namespace NightShift
 
         public bool IsRunning { get; private set; }
 
+        public bool IsClosed { get; private set; }
+
         public event Action<EventKind> Queued;
+
+        public void Close()
+        {
+            IsClosed = true;
+        }
 
         public void SetCompletedCount(int count)
         {
+            if (IsClosed)
+            {
+                return;
+            }
+
             for (int i = 0; i < entries.Count; i++)
             {
                 if (isConsumed[i] || isQueued[i] || entries[i].TaskCount > count)
@@ -59,6 +71,12 @@ namespace NightShift
         public bool TryTakeNext(float now, bool isTeleporting, bool canStartShadow, out EventKind kind)
         {
             kind = default;
+
+            if (IsClosed)
+            {
+                return false;
+            }
+
             int head = FindFirstUnconsumed(null);
 
             if (head < 0 || !isQueued[head] || !CanStart(now, isTeleporting))
@@ -81,7 +99,7 @@ namespace NightShift
 
         public bool TryTakeMirror(float now, bool isTeleporting)
         {
-            if (!CanStart(now, isTeleporting))
+            if (IsClosed || !CanStart(now, isTeleporting))
             {
                 return false;
             }
@@ -96,11 +114,6 @@ namespace NightShift
             IsRunning = true;
 
             return true;
-        }
-
-        public void BeginUnscheduled()
-        {
-            IsRunning = true;
         }
 
         public void End(float now)

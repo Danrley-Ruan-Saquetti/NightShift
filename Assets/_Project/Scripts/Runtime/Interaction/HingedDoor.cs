@@ -27,11 +27,14 @@ namespace NightShift
         public bool IsLocked { get; private set; }
         public bool IsHeld { get; private set; }
 
+        public float Angle => angle;
+
         private Quaternion closedRotation;
         private IXRSelectInteractor holdingInteractor;
         private float angle;
         private float grabOffset;
         private bool isAnimating;
+        private bool isLockPending;
 
         public event Action Released;
 
@@ -71,11 +74,13 @@ namespace NightShift
         public void Lock()
         {
             IsLocked = true;
+            isLockPending = false;
         }
 
         public void Unlock()
         {
             IsLocked = false;
+            isLockPending = false;
             CaptureGrabOffset();
         }
 
@@ -87,7 +92,8 @@ namespace NightShift
             }
 
             float closeSpeed = closeDuration > 0f ? maxOpenAngle / closeDuration : float.MaxValue;
-            StartCoroutine(AnimateTo(0f, closeSpeed, Lock));
+            isLockPending = true;
+            StartCoroutine(AnimateTo(0f, closeSpeed, LockIfPending));
         }
 
         public void OpenTo(float targetAngle, float duration)
@@ -116,6 +122,14 @@ namespace NightShift
             isAnimating = false;
             CaptureGrabOffset();
             finished?.Invoke();
+        }
+
+        private void LockIfPending()
+        {
+            if (isLockPending)
+            {
+                Lock();
+            }
         }
 
         private float GetHandAngle()

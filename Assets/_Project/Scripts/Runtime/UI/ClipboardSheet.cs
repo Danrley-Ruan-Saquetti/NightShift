@@ -14,6 +14,10 @@ namespace NightShift
         private string totalLabel = "Total";
         [SerializeField]
         private ProgressLine[] lines;
+        [SerializeField]
+        private ShiftExit shiftExit;
+        [SerializeField]
+        private GameObject statusLine;
 
         private TaskProgress Progress => registry.Progress;
 
@@ -21,6 +25,7 @@ namespace NightShift
         {
             Progress.TaskCompleted += OnTaskCompleted;
             Progress.ProgressReset += OnProgressReset;
+            shiftExit.Unlocked += Refresh;
             Refresh();
         }
 
@@ -28,10 +33,12 @@ namespace NightShift
         {
             Progress.TaskCompleted -= OnTaskCompleted;
             Progress.ProgressReset -= OnProgressReset;
+            shiftExit.Unlocked -= Refresh;
         }
 
         private void Refresh()
         {
+            statusLine.SetActive(shiftExit.IsUnlocked);
             totalText.text = Format(totalLabel, Progress.CompletedCount, Progress.TotalCount);
 
             foreach (ProgressLine line in lines)

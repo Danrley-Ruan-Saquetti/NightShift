@@ -23,7 +23,6 @@ namespace NightShift
         public EventKind? CurrentEvent { get; private set; }
 
         private EventSchedule schedule;
-        private bool isStopped;
 
         public event Action<EventKind> Queued;
         public event Action<EventKind> Started;
@@ -51,7 +50,7 @@ namespace NightShift
 
         private void Update()
         {
-            if (isStopped || schedule.IsRunning)
+            if (schedule.IsRunning)
             {
                 return;
             }
@@ -74,7 +73,7 @@ namespace NightShift
 
         public bool RequestMirrorShadow()
         {
-            if (isStopped || !shadow.CanStartIn(playerState.CurrentRoom))
+            if (!shadow.CanStartIn(playerState.CurrentRoom))
             {
                 return false;
             }
@@ -85,29 +84,6 @@ namespace NightShift
             }
 
             StartEvent(EventKind.Shadow);
-
-            return true;
-        }
-
-        public bool Request(EventKind kind, bool ignoreGap)
-        {
-            if (isStopped || schedule.IsRunning || teleportationProvider.IsFading)
-            {
-                return false;
-            }
-
-            if (kind == EventKind.Shadow && !shadow.CanStartIn(playerState.CurrentRoom))
-            {
-                return false;
-            }
-
-            if (!ignoreGap && !schedule.CanStart(Time.time, false))
-            {
-                return false;
-            }
-
-            schedule.BeginUnscheduled();
-            StartEvent(kind);
 
             return true;
         }
@@ -139,6 +115,11 @@ namespace NightShift
         private void OnTaskCompleted(string taskId, int total)
         {
             schedule.SetCompletedCount(total);
+
+            if (total >= tasks.Progress.TotalCount)
+            {
+                schedule.Close();
+            }
         }
 
         private void OnVisitorSucceeded()
@@ -153,7 +134,7 @@ namespace NightShift
 
         private void OnGameOverTriggered(GameOverReason reason)
         {
-            isStopped = true;
+            schedule.Close();
 
             if (CurrentEvent == null)
             {
