@@ -25,6 +25,8 @@ namespace NightShift
         private Renderer stainRenderer;
         [SerializeField]
         private Color sprayedColor = new(0.22f, 0.24f, 0.28f);
+        [SerializeField]
+        private AudioSource scrubSource;
 
         private readonly HashSet<Sponge> touchingSponges = new();
         private StainCleaning cleaning;
@@ -47,7 +49,11 @@ namespace NightShift
 
         private void Update()
         {
-            if (cleaning.IsCleaned || !IsBeingScrubbed())
+            bool isScrubbing = !cleaning.IsCleaned && IsBeingScrubbed();
+
+            UpdateScrubSound(isScrubbing);
+
+            if (!isScrubbing)
             {
                 return;
             }
@@ -75,6 +81,23 @@ namespace NightShift
             cleaning.Spray();
             color = new Color(sprayedColor.r, sprayedColor.g, sprayedColor.b, color.a);
             ApplyColor();
+        }
+
+        private void UpdateScrubSound(bool isScrubbing)
+        {
+            if (isScrubbing == scrubSource.isPlaying)
+            {
+                return;
+            }
+
+            if (isScrubbing)
+            {
+                scrubSource.Play();
+            }
+            else
+            {
+                scrubSource.Stop();
+            }
         }
 
         private bool IsBeingScrubbed()

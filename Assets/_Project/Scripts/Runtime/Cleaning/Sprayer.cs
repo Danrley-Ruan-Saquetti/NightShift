@@ -12,6 +12,10 @@ namespace NightShift
         [SerializeField]
         private ParticleSystem mist;
         [SerializeField]
+        private AudioSource spraySource;
+        [SerializeField]
+        private AudioClip sprayClip;
+        [SerializeField]
         private float range = 0.5f;
         [SerializeField]
         private float radius = 0.05f;
@@ -42,6 +46,7 @@ namespace NightShift
         {
             lastSprayTime = Time.time;
             mist.Play();
+            spraySource.PlayOneShot(sprayClip);
 
             RaycastHit[] hits = Physics.SphereCastAll(
                 nozzle.position,

@@ -6,6 +6,11 @@ namespace NightShift
     [RequireComponent(typeof(Collider))]
     public class TrashBin : MonoBehaviour
     {
+        [SerializeField]
+        private AudioSource discardSource;
+        [SerializeField]
+        private AudioClip discardClip;
+
         private readonly HashSet<Trash> containedTrash = new();
         private readonly List<Trash> trashToDiscard = new();
 
@@ -25,6 +30,7 @@ namespace NightShift
             {
                 containedTrash.Remove(trash);
                 trash.Discard();
+                discardSource.PlayOneShot(discardClip);
             }
         }
 

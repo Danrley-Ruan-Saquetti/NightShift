@@ -84,16 +84,17 @@ namespace NightShift
             CaptureGrabOffset();
         }
 
-        public void CloseAndLock()
+        public void CloseAndLock(Action closed)
         {
             if (isAnimating)
             {
                 return;
             }
 
+            bool wasOpen = !IsClosed();
             float closeSpeed = closeDuration > 0f ? maxOpenAngle / closeDuration : float.MaxValue;
             isLockPending = true;
-            StartCoroutine(AnimateTo(0f, closeSpeed, LockIfPending));
+            StartCoroutine(AnimateTo(0f, closeSpeed, () => FinishClose(wasOpen ? closed : null)));
         }
 
         public void OpenTo(float targetAngle, float duration)
@@ -124,12 +125,14 @@ namespace NightShift
             finished?.Invoke();
         }
 
-        private void LockIfPending()
+        private void FinishClose(Action closed)
         {
             if (isLockPending)
             {
                 Lock();
             }
+
+            closed?.Invoke();
         }
 
         private float GetHandAngle()

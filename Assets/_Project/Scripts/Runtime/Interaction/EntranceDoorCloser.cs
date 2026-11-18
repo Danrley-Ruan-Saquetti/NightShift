@@ -8,6 +8,10 @@ namespace NightShift
         private HingedDoor door;
         [SerializeField]
         private PlayerState playerState;
+        [SerializeField]
+        private AudioSource slamSource;
+        [SerializeField]
+        private AudioClip slamClip;
 
         private bool hasClosed;
 
@@ -36,7 +40,12 @@ namespace NightShift
             }
 
             hasClosed = true;
-            door.CloseAndLock();
+            door.CloseAndLock(OnDoorClosed);
+        }
+
+        private void OnDoorClosed()
+        {
+            slamSource.PlayOneShot(slamClip);
         }
 
         private void OnRoomChanged(Room _)
