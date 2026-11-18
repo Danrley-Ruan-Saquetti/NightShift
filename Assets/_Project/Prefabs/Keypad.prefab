@@ -61,7 +61,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -164,9 +164,9 @@ MonoBehaviour:
   successColor: {r: 0.1, g: 0.6, b: 0.2, a: 1}
   errorColor: {r: 0.7, g: 0.05, b: 0.05, a: 1}
   audioSource: {fileID: 5554306649807231912}
-  keyClip: {fileID: 8300000, guid: 55a079a776d14c643839c999d4758f8e, type: 3}
-  errorClip: {fileID: 8300000, guid: d04fe636b44fb564f99032af1249040a, type: 3}
-  unlockClip: {fileID: 8300000, guid: f7f861de85014214c9f998fccacda1e2, type: 3}
+  keyClip: {fileID: 8300000, guid: a0d67a64f6603934794e504c05bc6468, type: 3}
+  errorClip: {fileID: 8300000, guid: 195255be7fd4bcf42b00d2279cce4b7d, type: 3}
+  unlockClip: {fileID: 8300000, guid: 17c61e9745a04724e9017859060fb610, type: 3}
   door: {fileID: 0}
   registry: {fileID: 0}
   taskId: P3

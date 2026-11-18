@@ -135,7 +135,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   onColor: {r: 0.1, g: 1, b: 0.2, a: 1}
   offColor: {r: 0.5, g: 0.03, b: 0.03, a: 1}
   audioSource: {fileID: 1278192913422082178}
-  clickClip: {fileID: 8300000, guid: e912c19ac3df7c7458d9169963bb83f0, type: 3}
+  clickClip: {fileID: 8300000, guid: 2ecc388c58038e444b45da89665c2d29, type: 3}
 --- !u!1 &5621639402685863074
 GameObject:
   m_ObjectHideFlags: 0
