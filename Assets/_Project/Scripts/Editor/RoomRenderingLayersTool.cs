@@ -38,6 +38,8 @@ namespace NightShift
                 ApplyToRoomRenderers(room.transform, roomMask, allRoomsMask, closetMask);
             }
 
+            ApplyToDefaultOnlyRenderers(defaultMask);
+
             ApplyToLooseRenderers(roomLights, defaultMask | allRoomsMask);
             ApplyToDirectionalLights(defaultMask | allRoomsMask | closetMask);
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
@@ -82,6 +84,17 @@ namespace NightShift
                 if (!IsInsideAnyRoom(renderer.transform, roomLights))
                 {
                     SetRendererMask(renderer, looseMask);
+                }
+            }
+        }
+
+        private static void ApplyToDefaultOnlyRenderers(uint defaultMask)
+        {
+            foreach (DefaultRenderingLayerOnly marker in Object.FindObjectsByType<DefaultRenderingLayerOnly>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                foreach (Renderer renderer in marker.GetComponentsInChildren<Renderer>(true))
+                {
+                    SetRendererMask(renderer, defaultMask);
                 }
             }
         }
