@@ -33,5 +33,5 @@ Assets da Unity Asset Store não entram aqui. Formato: `- <Nome> by <Autor> [<Li
 - trash_fall by philberts [CC0] via Freesound (id 71512) — Assets/ThirdParty/Freesound/TrashDiscard.wav
 - Light Switch on by Philip_Berger [CC0] via Freesound (id 788643) — Assets/ThirdParty/Freesound/LightSwitchOn.wav
 - House Door Slam by bsumusictech [CC0] via Freesound (id 83506) — Assets/ThirdParty/Freesound/DoorSlam.wav
-- door_wood_thin_hall_closet_little_latchy_deadbolt_lock_unlock by kyles [CC0] via Freesound (id 453979) — Assets/ThirdParty/Freesound/DeadboltUnlock.wav
+- door_wood_thin_hall_closet_little_latchy_deadbolt_lock_unlock by kyles [CC0] via Freesound (id 453979) — Assets/ThirdParty/Freesound/DeadboltUnlock.wav (não usado na cena; a destrava da P1 usa um som da Asset Store)
 - Korean digital door lock keypad by cristyaria [CC0] via Freesound (id 867650) — Assets/ThirdParty/Freesound/KeypadUnlock.wav
