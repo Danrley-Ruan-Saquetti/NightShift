@@ -1,6 +1,6 @@
 # Créditos de assets de terceiros
 
-Assets da Unity Asset Store não entram aqui. Formato: `- <Nome> by <Autor> [<Licença>] via <Fonte> — <caminho no projeto>`.
+Formato: `- <Nome> by <Autor> [<Licença>] via <Fonte> — <caminho no projeto>`.
 
 ## Modelos (Poly Pizza)
 
@@ -35,3 +35,15 @@ Assets da Unity Asset Store não entram aqui. Formato: `- <Nome> by <Autor> [<Li
 - House Door Slam by bsumusictech [CC0] via Freesound (id 83506) — Assets/ThirdParty/Freesound/DoorSlam.wav
 - door_wood_thin_hall_closet_little_latchy_deadbolt_lock_unlock by kyles [CC0] via Freesound (id 453979) — Assets/ThirdParty/Freesound/DeadboltUnlock.wav (não usado na cena; a destrava da P1 usa um som da Asset Store)
 - Korean digital door lock keypad by cristyaria [CC0] via Freesound (id 867650) — Assets/ThirdParty/Freesound/KeypadUnlock.wav
+- Whispers, 'Schizophrenic' or Ghost-like voices by belarathbone [CC0] via Freesound (id 423869) — Assets/ThirdParty/Freesound/WhispersVoices.wav
+- Four_Voices_Whispering_3.wav by geoneo0 [CC0] via Freesound (id 193810) — Assets/ThirdParty/Freesound/WhispersFourVoices.wav
+- rain on window loop by alxl [CC0] via OpenGameArt — Assets/ThirdParty/OpenGameArt/RainOnWindowLoop.wav
+
+## Unity Asset Store
+
+- #NVJOB Slender (Rigged, BlendShapes) by Nick Veselov NVJOB [Unity Asset Store EULA] via Unity Asset Store (id 173376) — Assets/ThirdParty/NVJOBSlender
+- Footsteps - Essentials by NoxSound [Unity Asset Store EULA] via Unity Asset Store (id 189879) — Assets/ThirdParty/FootstepsEssentials
+- Horror SFX - 082918 by GWriterStudio [Unity Asset Store EULA] via Unity Asset Store (id 127389) — Assets/ThirdParty/HorrorSFX
+- Horror Stinger Sound Effects by DHSFX (https://soundcloud.com/dhsfx/sets/horror-stinger-sound-effects) [Unity Asset Store EULA] via Unity Asset Store (id 197235) — Assets/ThirdParty/HorrorStingerSoundEffects
+- Unnerving Ambient Sounds - Horror Game Sound Effect Pack by DHSFX (https://soundcloud.com/dafydd-harvey/sets/unnerving-ambient-sounds) [Unity Asset Store EULA] via Unity Asset Store (id 170590) — Assets/ThirdParty/UnnervingAmbientSounds
+- Horror Ambient Album - 060319 by GWriterStudio [Unity Asset Store EULA] via Unity Asset Store (id 147877) — Assets/ThirdParty/HorrorAmbientAlbum
