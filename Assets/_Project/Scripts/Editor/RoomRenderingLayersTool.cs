@@ -38,9 +38,8 @@ namespace NightShift
                 ApplyToRoomRenderers(room.transform, roomMask, allRoomsMask, closetMask);
             }
 
-            ApplyToDefaultOnlyRenderers(defaultMask);
-
             ApplyToLooseRenderers(roomLights, defaultMask | allRoomsMask);
+            ApplyToDefaultOnlyRenderers(defaultMask);
             ApplyToDirectionalLights(defaultMask | allRoomsMask | closetMask);
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         }
