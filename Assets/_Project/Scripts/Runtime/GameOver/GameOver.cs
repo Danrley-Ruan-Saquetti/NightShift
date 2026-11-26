@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
 
 namespace NightShift
@@ -16,7 +17,10 @@ namespace NightShift
         [SerializeField]
         private RoomLightsRegistry roomLights;
         [SerializeField]
-        private JumpscareFigure figure;
+        [FormerlySerializedAs("figure")]
+        private JumpscareFigure visitorFigure;
+        [SerializeField]
+        private JumpscareFigure shadowFigure;
         [SerializeField]
         private LayerMask obstacleMask;
         [SerializeField]
@@ -74,10 +78,10 @@ namespace NightShift
 
             IsRunning = true;
             Triggered?.Invoke(reason);
-            StartCoroutine(Run(transition));
+            StartCoroutine(Run(transition, reason));
         }
 
-        private IEnumerator Run(SceneTransition transition)
+        private IEnumerator Run(SceneTransition transition, GameOverReason reason)
         {
             transition.BlockInteractors();
             AudioListener.pause = true;
@@ -98,7 +102,7 @@ namespace NightShift
                 yield return null;
             }
 
-            ShowFigure(closet);
+            ShowFigure(closet, reason);
             SendHaptics();
 
             yield return new WaitForSecondsRealtime(scareDuration);
@@ -119,8 +123,9 @@ namespace NightShift
             }
         }
 
-        private void ShowFigure(Closet closet)
+        private void ShowFigure(Closet closet, GameOverReason reason)
         {
+            JumpscareFigure figure = JumpscareKillers.For(reason) == Killer.Shadow ? shadowFigure : visitorFigure;
             Vector3? exit = closet != null ? closet.ExitDirection : (Vector3?)null;
             Vector3 direction = JumpscarePlacement.ChooseDirection(head.rotation, exit);
             float obstacleDistance = closet != null ? float.PositiveInfinity : FindObstacleDistance(direction);
