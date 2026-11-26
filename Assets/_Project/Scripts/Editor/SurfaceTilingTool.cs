@@ -123,12 +123,16 @@ namespace NightShift
                 AssetDatabase.CreateAsset(derived, path);
             }
 
-            // Copia também na reutilização: a calibragem é feita na base e a cópia ficaria com o valor antigo.
+            ResyncWithCalibratedBase(derived, baseMaterial, u, v);
+            return derived;
+        }
+
+        private static void ResyncWithCalibratedBase(Material derived, Material baseMaterial, float u, float v)
+        {
             derived.CopyPropertiesFromMaterial(baseMaterial);
             derived.SetTextureScale(TilingProperty, new Vector2(u, v));
             derived.SetTextureOffset(TilingProperty, Vector2.zero);
             EditorUtility.SetDirty(derived);
-            return derived;
         }
 
         private static void DeleteUnusedGenerated(MeshRenderer[] renderers)
