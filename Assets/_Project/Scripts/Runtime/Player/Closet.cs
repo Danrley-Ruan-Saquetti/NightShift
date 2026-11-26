@@ -8,8 +8,11 @@ namespace NightShift
         private HingedDoor door;
         [SerializeField]
         private Transform hidingVolume;
+        [SerializeField]
+        private Transform cartSpot;
 
         public Transform HidingVolume => hidingVolume;
+        public Pose CartSpot => new(cartSpot.position, cartSpot.rotation);
         public bool IsDoorClosed => door.IsClosed();
         public Vector3 ExitDirection => transform.forward;
 
