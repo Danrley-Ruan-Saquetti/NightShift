@@ -15,6 +15,8 @@ namespace NightShift
         [SerializeField]
         private float fadeInDuration = 0.5f;
         [SerializeField]
+        private float maxFadeFrameTime = 0.05f;
+        [SerializeField]
         private Renderer overlay;
 
         public static SceneTransition Instance { get; private set; }
@@ -141,7 +143,8 @@ namespace NightShift
 
             while (!Mathf.Approximately(alpha, targetAlpha))
             {
-                ApplyAlpha(Mathf.MoveTowards(alpha, targetAlpha, Time.unscaledDeltaTime / duration), silencesAudio);
+                float frameTime = Mathf.Min(Time.unscaledDeltaTime, maxFadeFrameTime);
+                ApplyAlpha(Mathf.MoveTowards(alpha, targetAlpha, frameTime / duration), silencesAudio);
                 yield return null;
             }
         }
