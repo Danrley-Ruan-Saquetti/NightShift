@@ -31,7 +31,7 @@ namespace NightShift
 
             if (Phase == ShadowPhase.Reacting)
             {
-                Outcome = AdvanceReacting(deltaTime, isTargetLightOn, isHidden, hasSwitchedOffOtherRoom, hasTeleported);
+                Outcome = AdvanceReacting(deltaTime, isTargetLightOn, isHidden, hasSwitchedOffOtherRoom);
             }
 
             if (Phase == ShadowPhase.Holding && Outcome.Status == EventStatus.Running)
@@ -46,8 +46,7 @@ namespace NightShift
             float deltaTime,
             bool isTargetLightOn,
             bool isHidden,
-            bool hasSwitchedOffOtherRoom,
-            bool hasTeleported)
+            bool hasSwitchedOffOtherRoom)
         {
             if (!isTargetLightOn && !isHidden)
             {
@@ -64,7 +63,7 @@ namespace NightShift
                 return EventOutcome.Failed(isTargetLightOn ? GameOverReason.ShadowLightOn : GameOverReason.ShadowHidden);
             }
 
-            return CheckPlayerActions(hasSwitchedOffOtherRoom, hasTeleported);
+            return CheckWrongRoomSwitch(hasSwitchedOffOtherRoom);
         }
 
         private EventOutcome AdvanceHolding(
@@ -84,23 +83,11 @@ namespace NightShift
                 return EventOutcome.Failed(GameOverReason.ShadowHidden);
             }
 
-            EventOutcome playerAction = CheckPlayerActions(hasSwitchedOffOtherRoom, hasTeleported);
+            EventOutcome wrongRoomSwitch = CheckWrongRoomSwitch(hasSwitchedOffOtherRoom);
 
-            if (playerAction.Status == EventStatus.Failed)
+            if (wrongRoomSwitch.Status == EventStatus.Failed)
             {
-                return playerAction;
-            }
-
-            phaseElapsed += deltaTime;
-
-            return phaseElapsed >= holdDuration ? EventOutcome.Succeeded : EventOutcome.Running;
-        }
-
-        private static EventOutcome CheckPlayerActions(bool hasSwitchedOffOtherRoom, bool hasTeleported)
-        {
-            if (hasSwitchedOffOtherRoom)
-            {
-                return EventOutcome.Failed(GameOverReason.ShadowWrongRoomSwitch);
+                return wrongRoomSwitch;
             }
 
             if (hasTeleported)
@@ -108,7 +95,16 @@ namespace NightShift
                 return EventOutcome.Failed(GameOverReason.ShadowTeleported);
             }
 
-            return EventOutcome.Running;
+            phaseElapsed += deltaTime;
+
+            return phaseElapsed >= holdDuration ? EventOutcome.Succeeded : EventOutcome.Running;
+        }
+
+        private static EventOutcome CheckWrongRoomSwitch(bool hasSwitchedOffOtherRoom)
+        {
+            return hasSwitchedOffOtherRoom
+                ? EventOutcome.Failed(GameOverReason.ShadowWrongRoomSwitch)
+                : EventOutcome.Running;
         }
     }
 }

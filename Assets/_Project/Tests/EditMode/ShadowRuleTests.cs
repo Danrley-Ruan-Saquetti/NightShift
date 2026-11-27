@@ -149,13 +149,25 @@ namespace NightShift.Tests
         }
 
         [Test]
-        public void Teleports_DuringWindow_Fails()
+        public void Teleports_DuringWindow_DoesNotFail()
         {
             Advance(1f, true, false);
 
             EventOutcome outcome = rule.Tick(Step, true, false, false, true);
 
-            AssertFailed(outcome, GameOverReason.ShadowTeleported);
+            Assert.That(rule.Phase, Is.EqualTo(ShadowPhase.Reacting));
+            Assert.That(outcome.Status, Is.EqualTo(EventStatus.Running));
+        }
+
+        [Test]
+        public void TeleportsThenSwitchesOff_Succeeds()
+        {
+            rule.Tick(Step, true, false, false, true);
+            Advance(1f, true, false);
+
+            EventOutcome atEnd = Advance(8f, false, false);
+
+            Assert.That(atEnd.Status, Is.EqualTo(EventStatus.Succeeded));
         }
 
         [Test]
