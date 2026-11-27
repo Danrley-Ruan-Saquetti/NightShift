@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Colliders:
   - {fileID: 2194725003642535700}
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 16
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1

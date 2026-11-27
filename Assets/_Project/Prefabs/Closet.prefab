@@ -179,6 +179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   door: {fileID: 1327129228672525403}
   hidingVolume: {fileID: 1085034963110347309}
+  cartSpot: {fileID: 0}
 --- !u!1 &2128335397430524042
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,7 +615,7 @@ MonoBehaviour:
   m_InteractionManager: {fileID: 0}
   m_Colliders: []
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 2147483648
   m_DistanceCalculationMode: 1
   m_SelectMode: 1
   m_FocusMode: 1
