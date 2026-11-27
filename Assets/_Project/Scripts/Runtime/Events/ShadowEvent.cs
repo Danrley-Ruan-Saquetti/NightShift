@@ -19,11 +19,11 @@ namespace NightShift
         [SerializeField]
         private AudioSource whisperSource;
         [SerializeField]
-        private float reactWindow = 5f;
+        private float reactWindow = 10f;
         [SerializeField]
         private float holdDuration = 8f;
         [SerializeField]
-        private float flickerDuration = 5f;
+        private float flickerDuration = 10f;
         [SerializeField]
         private float silhouetteDelay = 2f;
         [SerializeField]
