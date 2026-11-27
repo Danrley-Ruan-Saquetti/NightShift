@@ -13,14 +13,31 @@ namespace NightShift
         private float fadeOutDuration = 0.1f;
         [SerializeField]
         private float fadeInDuration = 0.15f;
+        [SerializeField]
+        private Transform head;
+        [SerializeField]
+        private float maxHorizontalDistance = 2.5f;
 
         private bool isFading;
         private bool hasTeleported;
 
         public bool IsFading => isFading;
 
+        public bool IsWithinRange(Vector3 destination)
+        {
+            Vector3 offset = destination - head.position;
+            offset.y = 0f;
+
+            return offset.sqrMagnitude <= maxHorizontalDistance * maxHorizontalDistance;
+        }
+
         public override bool QueueTeleportRequest(TeleportRequest teleportRequest)
         {
+            if (!IsWithinRange(teleportRequest.destinationPosition))
+            {
+                return false;
+            }
+
             SceneTransition transition = SceneTransition.Instance;
             if (transition == null)
             {
